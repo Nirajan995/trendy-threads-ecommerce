@@ -1,22 +1,48 @@
 import React, { useState } from "react";
 import { Col, Container, Form, Row } from "react-bootstrap";
 import { Button, CircularProgress, TextField } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { errorToast, successToast } from "../service/toastify.service";
+import { useDispatch } from "react-redux";
+import { login } from "../slice/loginSlice";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [currentPass, setCurrPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const loginSubmitHandler = (e) => {
-    e.preventDefault();
-    if (currentPass !== password) {
-      errorToast("Current pass and pass must be same");
-    } else {
-    }
-    setLoading(true);
+  const navigate = useNavigate();
 
+  const dispatch = useDispatch();
+
+  const loginSubmitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+
+      const { data } = await axios.post(
+        import.meta.env.VITE_SERVER_URL + "/api/v1/auth/login",
+        { email, password }
+      );
+      if (data.status) {
+        //dispatch
+        const loginData = {
+          name: data.authData.name,
+          email: data.authData.email,
+          jwt: data.token,
+          role: data.authData.role,
+        };
+        console.log(loginData);
+        dispatch(login(loginData));
+        navigate("/home");
+        successToast("Login Successful");
+        setLoading(false);
+      }
+    } catch (error) {
+      errorToast(error.response.data.error);
+      setLoading(false);
+    }
     //axios api post call here
 
     //after response-> setLoading(false)
