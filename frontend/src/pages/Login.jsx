@@ -33,7 +33,6 @@ const Login = () => {
           jwt: data.token,
           role: data.authData.role,
         };
-        console.log(loginData);
         dispatch(login(loginData));
         navigate("/home");
         successToast("Login Successful");

@@ -3,25 +3,102 @@ import React, { useEffect, useState } from "react";
 import Loader from "../components/Loader";
 import { Col, Row } from "react-bootstrap";
 import Product from "../components/Product";
+import Filter from "../components/Filter";
+import { Container, Input } from "@material-ui/core";
 
 const Home = () => {
   const [products, setProducts] = useState({});
+  const [orginalProduct, setorginalProduct] = useState({});
+  const [sort, setSort] = useState([]);
+  const [filters, setFilters] = useState({});
   const getProducts = async () => {
     try {
       const { data } = await axios.get(
         import.meta.env.VITE_SERVER_URL + "/api/v1/product"
       );
-      console.log(data.data);
       setProducts(data.data);
+      setorginalProduct(data.data);
     } catch (error) {}
   };
+
+  const handleSort = (value) => {
+    sort.includes(value)
+      ? setSort(sort.filter((s) => s !== value))
+      : setSort((prevState) => {
+          return [...prevState, value];
+        });
+  };
+
+  const handleFilters = (key, value) => {
+    setFilters({ ...filters, [key]: value });
+  };
+
+  const fetchFilteredProducts = async () => {
+    const { data } = await axios.get(
+      import.meta.env.VITE_SERVER_URL + "/api/v1/product",
+      {
+        params: {
+          ...filters,
+        },
+      }
+    );
+    setProducts(data.data);
+    setorginalProduct(data.data);
+  };
+
   useEffect(() => {
     getProducts();
   }, []);
+
+  useEffect(() => {
+    fetchFilteredProducts();
+  }, [filters]);
+
+  useEffect(() => {
+    handleFilters("sort", sort.join(","));
+  }, [sort]);
+
+  const searchProduct = (value) => {
+    const searcValue = value.toLowerCase();
+
+    const searchedProds = orginalProduct.results.filter((result) => {
+      return (
+        result.name.toLowerCase().includes(searcValue) ||
+        result.brand.toLowerCase().includes(searcValue)
+      );
+    });
+
+    setProducts((prev) => {
+      return {
+        ...prev,
+        results: searchedProds,
+      };
+    });
+  };
+
   return (
-    <>
+    <Container>
       {products.status === "success" ? (
         <>
+          <div className="search-btn">
+            <Input
+              type="text"
+              placeholder="Search Products here"
+              onChange={(e) => searchProduct(e.target.value)}
+            />
+          </div>
+          <div className="clearfix">
+            <span className="float-start">
+              <h1>Latest Product ({products.results.length})</h1>
+            </span>
+            <span className="float-end">
+              <Filter
+                sort={sort}
+                handleSort={handleSort}
+                handleFilters={handleFilters}
+              />
+            </span>
+          </div>
           <Row>
             {products.results.map((product) => {
               return (
@@ -35,7 +112,7 @@ const Home = () => {
       ) : (
         <Loader />
       )}
-    </>
+    </Container>
   );
 };
 
