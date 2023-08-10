@@ -23,7 +23,7 @@ const Home = () => {
 
   const handleSort = (value) => {
     sort.includes(value)
-      ? setSort(sort.filter((s) => s !== value))
+      ? setSort(sort.filter((srt) => srt !== value))
       : setSort((prevState) => {
           return [...prevState, value];
         });
@@ -60,7 +60,6 @@ const Home = () => {
 
   const searchProduct = (value) => {
     const searcValue = value.toLowerCase();
-
     const searchedProds = orginalProduct.results.filter((result) => {
       return (
         result.name.toLowerCase().includes(searcValue) ||
@@ -100,13 +99,17 @@ const Home = () => {
             </span>
           </div>
           <Row>
-            {products.results.map((product) => {
-              return (
-                <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-                  <Product product={product} />
-                </Col>
-              );
-            })}
+            {products.results.length === 0 ? (
+              <h3 className="text-center">No Products Found</h3>
+            ) : (
+              products.results.map((product) => {
+                return (
+                  <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+                    <Product product={product} />
+                  </Col>
+                );
+              })
+            )}
           </Row>
         </>
       ) : (

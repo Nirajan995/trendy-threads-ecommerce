@@ -107,6 +107,7 @@ const Filter = ({ handleSort, handleFilters, sort }) => {
           >
             <InputLabel>Category</InputLabel>
             <Select
+              defaultValue=""
               label="Vategory"
               onChange={(e) => handleFilters("category", e.target.value)}
             >
