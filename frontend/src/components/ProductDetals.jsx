@@ -5,6 +5,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import Loader from "./Loader";
 import { Col, Image, ListGroup, Row } from "react-bootstrap";
 import Rating from "./Rating";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../slice/productSlice";
 
 const ProductDetals = () => {
   const [product, setProduct] = useState({});
@@ -13,15 +15,38 @@ const ProductDetals = () => {
 
   const navigate = useNavigate();
 
+  const dispatch = useDispatch();
+
   const getProduct = async () => {
     const { data } = await axios.get(
       `${import.meta.env.VITE_SERVER_URL}/api/v1/product/${id}`
     );
     setProduct(data);
   };
+
   useEffect(() => {
     getProduct();
   }, []);
+
+  const handleAddToCart = (quantity) => {
+    const data = payloadForCartItem(product.data, quantity);
+
+    dispatch(addToCart(data));
+
+    navigate("/cart");
+  };
+
+  const payloadForCartItem = (data, qty) => {
+    return {
+      productId: data._id,
+      productName: data.name,
+      productImage: data.productImage,
+      price: data.price,
+      countInStock: data.countInStock,
+      qty,
+    };
+  };
+
   return (
     <>
       {" "}
@@ -104,7 +129,7 @@ const ProductDetals = () => {
                     color="primary"
                     variant="contained"
                     fullWidth
-                    onClick={() => navigate("/cart")}
+                    onClick={() => handleAddToCart(qty)}
                     disabled={product.data.countInStock === 0}
                   >
                     Add To Cart
