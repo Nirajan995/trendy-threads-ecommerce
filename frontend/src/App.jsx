@@ -10,6 +10,8 @@ import Cart from "./pages/Cart";
 import Shipping from "./pages/Shipping";
 import PaymentMethod from "./pages/PaymentMethod";
 import PlaceOrder from "./pages/PlaceOrder";
+import Order from "./pages/Order";
+import Success from "./pages/Success";
 
 const App = () => {
   return (
@@ -24,6 +26,8 @@ const App = () => {
         <Route path="/shipping" element={<Shipping />} />
         <Route path="/payment" element={<PaymentMethod />} />
         <Route path="/place-order" element={<PlaceOrder />} />
+        <Route path="/order/:orderId" element={<Order />} />
+        <Route path="/success" element={<Success />} />
       </Routes>
       <ToastContainer />
     </>

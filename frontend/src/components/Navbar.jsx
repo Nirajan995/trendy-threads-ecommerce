@@ -1,12 +1,25 @@
 import React from "react";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Container, Nav, NavDropdown, Navbar } from "react-bootstrap";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { logout } from "../slice/loginSlice";
+import { resetOrder } from "../slice/orderSlice";
+import { resetCart } from "../slice/productSlice";
 
 const NavbarComp = () => {
   const user = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const logoutHandler = () => {
+    dispatch(logout());
+    dispatch(resetCart());
+    dispatch(resetOrder());
+
+    navigate("/");
+  };
   return (
     <header>
       <Navbar bg="dark" variant="dark" collapseOnSelect expand="lg">
@@ -26,7 +39,7 @@ const NavbarComp = () => {
                   <Link to={"/profile"}>
                     <NavDropdown.Item>Profile</NavDropdown.Item>
                   </Link>
-                  <Link to={"/"}>
+                  <Link onClick={logoutHandler} className="btn btn-light">
                     <NavDropdown.Item>Logout</NavDropdown.Item>
                   </Link>
                 </NavDropdown>

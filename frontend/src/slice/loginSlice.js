@@ -18,10 +18,18 @@ const loginSlice = createSlice({
          state.role = data.payload.role;
          state.name = data.payload.name;
          state.email = data.payload.email;
+      },
+      logout: async (state) => {
+         state.isLoggedIn = false;
+         state.jwt = '';
+         state.role = '';
+         state.name = '';
+         state.email = '';
+
       }
    }
 })
 
 export default loginSlice.reducer;
 
-export const { login } = loginSlice.actions;
+export const { login, logout } = loginSlice.actions;
