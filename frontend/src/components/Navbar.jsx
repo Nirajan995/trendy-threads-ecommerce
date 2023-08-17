@@ -31,9 +31,11 @@ const NavbarComp = () => {
           <Navbar.Collapse id="basic-navbar-nav">
             {/* Search Box */}
             <Nav className="ms-auto">
-              <Link to={""}>
-                <i className="fas fa-shopping-cart mt-3 me-2"></i>
-              </Link>
+              {user.role === "user" && (
+                <Link to={""}>
+                  <i className="fas fa-shopping-cart mt-3 me-2"></i>
+                </Link>
+              )}
               {user.isLoggedIn ? (
                 <NavDropdown title={user.name} id="username">
                   <Link to={"/profile"}>
