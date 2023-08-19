@@ -13,6 +13,19 @@ export const postData = async (url, data, token) => {
    }
 }
 
+export const updateData = async (url, data, token) => {
+   try {
+      const response = await axios.put(`${import.meta.env.VITE_SERVER_URL}/api/v1/${url}`, data, {
+         headers: {
+            Authorization: `Bearer ${token}`
+         }
+      });
+      return response.data;
+   } catch (error) {
+
+   }
+}
+
 export const getData = async (url) => {
    try {
       const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/v1/${url}`);

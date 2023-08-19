@@ -8,7 +8,7 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import React from "react";
-import { Button, Col, Form, Modal, Row } from "react-bootstrap";
+import { Button, Col, Form, Image, Modal, Row } from "react-bootstrap";
 
 const useStyles = makeStyles((theme) => ({
   typography: {
@@ -26,17 +26,32 @@ const ProductModal = ({
   handleCloseForm,
   handleChange,
   handleSubmit,
+  handleEdit,
+  edit,
+  product,
 }) => {
   const classes = useStyles();
   return (
     <Modal show={openForm} centered size="lg">
       <Modal.Header>
-        <Modal.Title>Add Product</Modal.Title>
+        <Modal.Title>{edit ? "Update Product" : "Add Product"}</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
         <Form>
           <Container>
+            {edit && (
+              <Row className="mb-2">
+                <Col md={6}>
+                  <Form.Label>Product Image</Form.Label>
+                  <Image
+                    src={product.productImage}
+                    width={"100"}
+                    height={"100"}
+                  />
+                </Col>
+              </Row>
+            )}
             <Row>
               <Col cs={12} md={6}>
                 <TextField
@@ -49,6 +64,7 @@ const ProductModal = ({
                   name="name"
                   label="Product Name"
                   id="name"
+                  value={product.name}
                   onChange={handleChange}
                 />
               </Col>
@@ -62,6 +78,7 @@ const ProductModal = ({
                   name="brand"
                   label="Product brand"
                   id="brand"
+                  value={product.brand}
                   onChange={handleChange}
                 />
               </Col>
@@ -76,6 +93,7 @@ const ProductModal = ({
                   fullWidth
                   name="price"
                   label="Product Price"
+                  value={product.price}
                   id="price"
                   onChange={handleChange}
                 />
@@ -88,6 +106,7 @@ const ProductModal = ({
                   required
                   fullWidth
                   name="countInStock"
+                  value={product.countInStock}
                   label="Count In Stock"
                   id="countInStock"
                   onChange={handleChange}
@@ -95,24 +114,27 @@ const ProductModal = ({
               </Col>
             </Row>
             <Row>
-              <Col cs={12} md={6}>
-                <TextField
-                  variant="outlined"
-                  type="file"
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="productImage"
-                  id="file"
-                  onChange={handleChange}
-                />
-              </Col>
+              {!edit && (
+                <Col cs={12} md={6}>
+                  <TextField
+                    variant="outlined"
+                    type="file"
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="productImage"
+                    id="file"
+                    onChange={handleChange}
+                  />
+                </Col>
+              )}
               <Col cs={12} md={6}>
                 <FormControl variant="outlined" className={classes.formControl}>
                   <InputLabel>Category</InputLabel>
                   <Select
                     label="Category"
                     name="category"
+                    value={product.category}
                     onChange={handleChange}
                   >
                     <MenuItem value="Shirt">T-Shirt</MenuItem>
@@ -134,6 +156,7 @@ const ProductModal = ({
                   id="description"
                   label="Description"
                   multiline
+                  value={product.description}
                   minRows={"5"}
                   onChange={handleChange}
                 />
@@ -148,9 +171,9 @@ const ProductModal = ({
           variant="contained"
           color="primary"
           className="mr-2"
-          onClick={handleSubmit}
+          onClick={edit ? handleEdit : handleSubmit}
         >
-          Submit
+          {edit ? "Update" : "Submit"}
         </Button>
         <Button variant="contained" color="secondary" onClick={handleCloseForm}>
           Close
