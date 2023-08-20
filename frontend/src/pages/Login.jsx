@@ -34,7 +34,11 @@ const Login = () => {
           role: data.authData.role,
         };
         dispatch(login(loginData));
-        navigate("/home");
+        if (data.authData.role === "admin") {
+          navigate("/admin/products");
+        } else {
+          navigate("/home");
+        }
         successToast("Login Successful");
         setLoading(false);
       }

@@ -17,9 +17,39 @@ const Home = () => {
         import.meta.env.VITE_SERVER_URL + "/api/v1/product"
       );
       setProducts(data.data);
+      const allCategories = data.data.results.map((result) => {
+        return result.category;
+      });
+      const categories = [...new Set(allCategories)];
+      let obj = {
+        type: "",
+        data: [],
+      };
+      const newProduct = categories.map((category) => {
+        const product = data.data.results.filter(
+          (result) => result.category === category
+        );
+        obj = {
+          type: category,
+          data: product,
+        };
+        return obj;
+      });
+
       setorginalProduct(data.data);
     } catch (error) {}
   };
+
+  [
+    {
+      type: "Vest",
+      data: [],
+    },
+    {
+      type: "Pants",
+      data: [],
+    },
+  ];
 
   const handleSort = (value) => {
     sort.includes(value)

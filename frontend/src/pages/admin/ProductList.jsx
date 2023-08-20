@@ -197,6 +197,16 @@ const ProductList = () => {
   useEffect(() => {
     getProducts();
   }, []);
+
+  function returnDate(product) {
+    return (
+      new Date(product.createdAt).getFullYear() +
+      "-" +
+      new Date(product.createdAt).getMonth() +
+      "-" +
+      new Date(product.createdAt).getDate()
+    );
+  }
   return (
     <>
       {products.status === "success" ? (
@@ -231,6 +241,7 @@ const ProductList = () => {
                 <th>Price</th>
                 <th>Category</th>
                 <th>Brand</th>
+                <th>Created At</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -252,6 +263,7 @@ const ProductList = () => {
                       <td>{product.price}</td>
                       <td>{product.category}</td>
                       <td>{product.brand}</td>
+                      <td>{returnDate(product)}</td>
                       <td>
                         <Button
                           variant="outlined"

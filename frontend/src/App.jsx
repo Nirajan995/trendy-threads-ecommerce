@@ -13,6 +13,8 @@ import PlaceOrder from "./pages/PlaceOrder";
 import Order from "./pages/Order";
 import Success from "./pages/Success";
 import ProductList from "./pages/admin/ProductList";
+import SecureRoute from "./routes/SecureRoute";
+import AdminRoute from "./routes/AdminRoute";
 
 const App = () => {
   return (
@@ -22,14 +24,18 @@ const App = () => {
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/product/:id" element={<ProductDetals />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/shipping" element={<Shipping />} />
-        <Route path="/payment" element={<PaymentMethod />} />
-        <Route path="/place-order" element={<PlaceOrder />} />
-        <Route path="/order/:orderId" element={<Order />} />
-        <Route path="/success" element={<Success />} />
-        <Route path="/admin/products" element={<ProductList />} />
+        <Route path="/" element={<SecureRoute />}>
+          <Route path="/product/:id" element={<ProductDetals />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/shipping" element={<Shipping />} />
+          <Route path="/payment" element={<PaymentMethod />} />
+          <Route path="/place-order" element={<PlaceOrder />} />
+          <Route path="/order/:orderId" element={<Order />} />
+          <Route path="/success" element={<Success />} />
+          <Route path="/" element={<AdminRoute />}>
+            <Route path="/admin/products" element={<ProductList />} />
+          </Route>
+        </Route>
       </Routes>
       <ToastContainer />
     </>

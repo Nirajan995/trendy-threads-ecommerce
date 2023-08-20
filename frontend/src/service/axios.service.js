@@ -1,4 +1,5 @@
 import axios from "axios"
+import { errorToast } from "./toastify.service";
 
 export const postData = async (url, data, token) => {
    try {
@@ -9,7 +10,7 @@ export const postData = async (url, data, token) => {
       });
       return response.data;
    } catch (error) {
-
+      errorToast(error.response.data.error)
    }
 }
 
@@ -22,7 +23,7 @@ export const updateData = async (url, data, token) => {
       });
       return response.data;
    } catch (error) {
-
+      errorToast(error.response.data.error)
    }
 }
 
@@ -31,7 +32,7 @@ export const getData = async (url) => {
       const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/v1/${url}`);
       return response.data;
    } catch (error) {
-
+      errorToast(error.response.data.error)
    }
 }
 
@@ -44,6 +45,6 @@ export const deleteData = async (url, token) => {
       });
       return response.data;
    } catch (error) {
-
+      errorToast(error.response.data.error)
    }
 }

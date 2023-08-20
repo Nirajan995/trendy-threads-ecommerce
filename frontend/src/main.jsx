@@ -8,15 +8,19 @@ import { Provider } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 import persistor, { store } from "./store/store.js";
 import { PersistGate } from "redux-persist/integration/react";
+import PageError from "./components/PageError.jsx";
+import { ErrorBoundary } from "react-error-boundary";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <App />
-        </PersistGate>
-      </Provider>
-    </BrowserRouter>
+    <ErrorBoundary fallback={<PageError />}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <App />
+          </PersistGate>
+        </Provider>
+      </BrowserRouter>
+    </ErrorBoundary>
   </React.StrictMode>
 );
